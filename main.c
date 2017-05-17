@@ -4,6 +4,7 @@
 #include "rlmalloc.h"
 
 #define MY_NAME "rafael"
+#define SMALL_STR "tiny"
 
 int main() {
   
@@ -53,19 +54,40 @@ int main() {
   printf("Second memory allocation: Printing my_name\n");
   printf("%s", my_name);
 
+  /*******************************************************/
+  /*******************************************************/
+  /********** DEALLOC FIRST AND ALLOC THIRD  *************/
+  /*******************************************************/
+  /*******************************************************/
   
-  /*******************************************************/
-  /*******************************************************/
-  /********************** FREE ZONE **********************/
-  /*******************************************************/
-  /*******************************************************/
-  printf("\nSecond memory allocation: Freeing my_name\n");
-  rlfree(my_name);
-  printf("Second memory allocation: Free DONE!");
-
   printf("\nFirst memory allocation: Freeing array\n");
   rlfree(arr);
-  printf("First memory allocation: Free DONE!");
+  printf("First memory allocation: Free DONE!\n");
+  
+  size_t SMALL_STR_SIZE = sizeof(SMALL_STR);
+  printf("Third memory allocation will take place NOW!\n");
+  char* small_str = (char*) rlmalloc(sizeof(*small_str) * SMALL_STR_SIZE);
+   if (!small_str) {
+    printf("rlmalloc sucks!\n");
+    return 1;
+  }
+  
+  const char* small_str_aux = SMALL_STR;
+  memcpy(small_str, small_str_aux, SMALL_STR_SIZE);
+
+  printf("Third memory allocation: Printing small_str\n");
+  printf("%s", small_str);
+
+  printf("\nThird memory allocation: Freeing small_str\n");
+  rlfree(small_str);
+  printf("Third memory allocation: Free DONE!\n");
+
+  printf("AAAAAAAAAAAA%s\n", my_name);
+
+  printf("\nSecond memory allocation: Freeing my_name\n");
+  rlfree(my_name);
+  printf("Second memory allocation: Free DONE!\n");
+
 
   return 0;
 }

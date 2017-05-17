@@ -204,7 +204,7 @@ void rlfree(void* ptr) {
   block->is_free = true;
 
   if (block->prev && block->prev->is_free) {
-    block = merge_block_with_next(block->next);
+    block = merge_block_with_next(block->prev);
   }
 
   if (block->next) {
