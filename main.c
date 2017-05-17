@@ -6,6 +6,13 @@
 #define MY_NAME "rafael"
 #define SMALL_STR "tiny"
 
+#define verify_rlmalloc_ptr(ptr) do { \
+  if (!ptr) { \
+    printf("rlmalloc sucks!\n"); \
+    return 1; \
+  } \
+} while(0)
+
 int main() {
   
   /*******************************************************/
@@ -17,10 +24,7 @@ int main() {
   
   printf("First memory allocation will take place NOW!\n");
   int* arr = (int*) rlmalloc(sizeof(*arr) * ARR_SIZE);
-  if (!arr) {
-    printf("rlmalloc sucks!\n");
-    return 1;
-  }
+  verify_rlmalloc_ptr(arr);
 
   printf("First memory allocation DONE!\n");
 
@@ -43,10 +47,7 @@ int main() {
 
   printf("Second memory allocation will take place NOW!\n");
   char* my_name = (char*) rlmalloc(sizeof(*my_name) * MY_NAME_SIZE);
-  if (!my_name) {
-    printf("rlmalloc sucks!\n");
-    return 1;
-  }
+  verify_rlmalloc_ptr(my_name);
 
   const char* aux = MY_NAME;
   memcpy(my_name, aux, MY_NAME_SIZE);
@@ -59,7 +60,6 @@ int main() {
   /********** DEALLOC FIRST AND ALLOC THIRD  *************/
   /*******************************************************/
   /*******************************************************/
-  
   printf("\nFirst memory allocation: Freeing array\n");
   rlfree(arr);
   printf("First memory allocation: Free DONE!\n");
@@ -67,10 +67,7 @@ int main() {
   size_t SMALL_STR_SIZE = sizeof(SMALL_STR);
   printf("Third memory allocation will take place NOW!\n");
   char* small_str = (char*) rlmalloc(sizeof(*small_str) * SMALL_STR_SIZE);
-   if (!small_str) {
-    printf("rlmalloc sucks!\n");
-    return 1;
-  }
+  verify_rlmalloc_ptr(small_str);
   
   const char* small_str_aux = SMALL_STR;
   memcpy(small_str, small_str_aux, SMALL_STR_SIZE);
@@ -82,7 +79,7 @@ int main() {
   rlfree(small_str);
   printf("Third memory allocation: Free DONE!\n");
 
-  printf("AAAAAAAAAAAA%s\n", my_name);
+  printf("Second memory allocation: Printing my_name again: %s\n", my_name);
 
   printf("\nSecond memory allocation: Freeing my_name\n");
   rlfree(my_name);
