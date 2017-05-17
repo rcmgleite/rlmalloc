@@ -89,5 +89,36 @@ int main() {
   printf("Second memory allocation: Free DONE!\n");
 
 
+  /*******************************************************/
+  /*******************************************************/
+  /****************** RANDOM ALLOCATIONS *****************/
+  /*******************************************************/
+  /*******************************************************/
+  printf("Random allocs\n");
+  char* var1 = (char*) rlmalloc(sizeof(*var1) * 10);
+  char* var2 = (char*) rlmalloc(sizeof(*var2) * 11);
+  char* var3 = (char*) rlmalloc(sizeof(*var3) * 12);
+  char* var4 = (char*) rlmalloc(sizeof(*var4) * 13);
+  char* var5 = (char*) rlmalloc(sizeof(*var5) * 14);
+  
+  printf("Some free...\n");
+  rlfree(var1);
+  rlfree(var2);
+  rlfree(var3);
+
+  printf("More random allocs\n");
+  char* var6 = (char*) rlmalloc(sizeof(*var6) * 3);
+  char* var7 = (char*) rlmalloc(sizeof(*var7) * 4);
+  char* var8 = (char*) rlmalloc(sizeof(*var8) * 5);
+
+  printf("Final frees\n");
+  rlfree(var4);
+  rlfree(var5);
+  rlfree(var6);
+  rlfree(var7);
+  rlfree(var8);
+  
+  printf("DONE!\n");
+
   return 0;
 }

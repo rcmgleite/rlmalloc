@@ -71,9 +71,7 @@ Block_metadata* get_free_block(Block_metadata** last, size_t size) {
  *  @param size_t size: size of the requested new block
  */
 Block_metadata* extend_heap(Block_metadata* last, size_t size) {
-  Block_metadata* block;
-  block = (Block_metadata*)sbrk(0);
-
+  Block_metadata* block = (Block_metadata*)sbrk(0);
   if (sbrk(BLOCK_METADATA_SIZE + size) == (void*)-1) { // sbrk failed
     return NULL;
   }
@@ -98,7 +96,7 @@ Block_metadata* extend_heap(Block_metadata* last, size_t size) {
  *  @size_t size new block size
  */
 void split_block(Block_metadata* block, size_t size) {
-  Block_metadata* new_block = (Block_metadata*) block->block_metadata_end + size; // important to have the block_metadata_end as char[0] for the pointer arithmetic
+  Block_metadata* new_block = (Block_metadata*) (block->block_metadata_end + size); // important to have the block_metadata_end as char[0] for the pointer arithmetic
   new_block->size = block->size - size - BLOCK_METADATA_SIZE;
   new_block->next = block->next;
   new_block->prev = block;
@@ -127,8 +125,8 @@ void* rlmalloc(size_t size) {
     
     heap_base_ptr = block_to_return;
   } else {
-    Block_metadata* last_heap_ptr = (Block_metadata*)heap_base_ptr;
-    block_to_return = get_free_block(&last_heap_ptr, aligned_size);
+    Block_metadata* last_visited_block = (Block_metadata*)heap_base_ptr;
+    block_to_return = get_free_block(&last_visited_block, aligned_size);
     if (block_to_return) { // There is a free block already got from OS
       if (block_to_return->size - aligned_size >= BLOCK_METADATA_SIZE + sizeof(long)) {
         split_block(block_to_return, aligned_size);
@@ -136,7 +134,7 @@ void* rlmalloc(size_t size) {
       
       block_to_return->is_free = false;
     } else { // No free blocks, we must ask more memory for the OS
-      block_to_return = extend_heap(last_heap_ptr, aligned_size);
+      block_to_return = extend_heap(last_visited_block, aligned_size);
       if (!block_to_return) {
         return NULL;
       }
