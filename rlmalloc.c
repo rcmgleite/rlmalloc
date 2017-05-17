@@ -187,8 +187,8 @@ bool is_valid_ptr(void* ptr) {
  *  Free implementation
  *
  *   It's mandatory that the free function can:
- *     1) Validate the input pointer (is it realy a malloc’ed pointer ?)
- *     2) Finde the meta-data pointer
+ *     1) Validate the input pointer (is it really a malloc’ed pointer?)
+ *     2) Find the meta-data pointer
  */
 void rlfree(void* ptr) {
   if (!is_valid_ptr(ptr)) {
